@@ -9,11 +9,11 @@
         <form @submit.prevent="handleLogin">
           <div class="mb-3 text-start">
             <label class="form-label text-muted">Username</label>
-            <input type="text" v-model="form.username" class="form-control" placeholder="Contoh: admin123" required pattern="[a-z0-9]{6,}" title="Minimal 6 karakter, hanya huruf kecil dan angka">
+            <input type="text" v-model="form.username" class="form-control" placeholder="Masukkan Username" required pattern="[a-z0-9]{6,}" title="Minimal 6 karakter, hanya huruf kecil dan angka">
           </div>
           <div class="mb-4 text-start">
             <label class="form-label text-muted">PIN</label>
-            <input type="password" v-model="form.pin" class="form-control" placeholder="••••••" required pattern="[0-9]{6,}" title="Minimal 6 digit angka" inputmode="numeric">
+            <input type="password" v-model="form.pin" class="form-control" placeholder="Masukkan PIN" required pattern="[0-9]{6,}" title="Minimal 6 digit angka" inputmode="numeric">
           </div>
           <button type="submit" :disabled="loading" class="btn btn-primary w-100 py-2">
             {{ loading ? 'Memverifikasi... 🔑' : 'Masuk Aplikasi' }}

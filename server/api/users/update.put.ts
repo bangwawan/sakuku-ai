@@ -26,12 +26,12 @@ export default defineEventHandler(async (event) => {
             const hash = crypto.createHash('md5').update(body.pin).digest('hex');
             await pool.execute(
                 'UPDATE pengguna SET nama_lengkap = ?, no_wa = ?, email = ?, is_active = ?, pin = ? WHERE username = ? AND role = "pencatat"', 
-                [finalNama, body.no_wa || null, body.email || null, body.is_active ? 1 : 0, hash, body.username]
+                [finalNama, body.no_wa || null, body.email || null, body.is_active ? true : false, hash, body.username]
             );
         } else {
             await pool.execute(
                 'UPDATE pengguna SET nama_lengkap = ?, no_wa = ?, email = ?, is_active = ? WHERE username = ? AND role = "pencatat"', 
-                [finalNama, body.no_wa || null, body.email || null, body.is_active ? 1 : 0, body.username]
+                [finalNama, body.no_wa || null, body.email || null, body.is_active ? true : false, body.username]
             );
         }
         

@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
 
         if (rows.length > 0) {
             const user = rows[0];
-            if (user.is_active !== 1) {
+            if (user.is_active === 0 || user.is_active === false) {
                 return { status: 'error', pesan: 'Akun Anda dinonaktifkan. Silakan hubungi Administrator.' };
             }
             // Set session cookie valid selama 7 hari

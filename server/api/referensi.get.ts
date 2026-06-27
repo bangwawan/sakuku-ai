@@ -15,9 +15,9 @@ export default defineEventHandler(async (event) => {
     });
 
     return {
-        kategori: dataKategori.filter((r: any) => r.is_active === 1).map((r: any) => [r.jenis, r.nama]),
-        kantong: dataKantong.filter((k: any) => k.is_active === 1).map((k: any) => k.nama),
-        kategoriDetail: dataKategori.map((r: any) => ({ jenis: r.jenis, nama: r.nama, is_active: r.is_active === 1, isUsed: usedKategori.has(r.nama.trim()) })),
-        kantongDetail: dataKantong.map((k: any) => ({ nama: k.nama, is_active: k.is_active === 1, isUsed: usedKantong.has(k.nama.trim()) }))
+        kategori: dataKategori.filter((r: any) => r.is_active === 1 || r.is_active === true).map((r: any) => [r.jenis, r.nama]),
+        kantong: dataKantong.filter((k: any) => k.is_active === 1 || k.is_active === true).map((k: any) => k.nama),
+        kategoriDetail: dataKategori.map((r: any) => ({ jenis: r.jenis, nama: r.nama, is_active: (r.is_active === 1 || r.is_active === true), isUsed: usedKategori.has(r.nama.trim()) })),
+        kantongDetail: dataKantong.map((k: any) => ({ nama: k.nama, is_active: (k.is_active === 1 || k.is_active === true), isUsed: usedKantong.has(k.nama.trim()) }))
     };
 });

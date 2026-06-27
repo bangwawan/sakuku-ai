@@ -10,20 +10,20 @@ CREATE TABLE IF NOT EXISTS pengguna (
     no_wa VARCHAR(20) NULL,
     email VARCHAR(100) NULL,
     foto LONGTEXT NULL,
-    is_active TINYINT(1) DEFAULT 1
+    is_active BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS kantong (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nama VARCHAR(50) NOT NULL UNIQUE,
-    is_active TINYINT(1) DEFAULT 1
+    is_active BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS kategori (
     id INT AUTO_INCREMENT PRIMARY KEY,
     jenis ENUM('Pemasukan', 'Pengeluaran') NOT NULL,
     nama VARCHAR(50) NOT NULL UNIQUE,
-    is_active TINYINT(1) DEFAULT 1
+    is_active BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS transaksi (

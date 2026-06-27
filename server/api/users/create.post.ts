@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
         const hash = crypto.createHash('md5').update(body.pin).digest('hex');
         await pool.execute(
             'INSERT INTO pengguna (username, pin, role, nama_lengkap, no_wa, email, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)', 
-            [body.username.toLowerCase(), hash, 'pencatat', body.nama_lengkap || null, body.no_wa || null, body.email || null, 1]
+            [body.username.toLowerCase(), hash, 'pencatat', body.nama_lengkap || null, body.no_wa || null, body.email || null, true]
         );
         return { status: 'success', pesan: 'Pengguna berhasil ditambahkan' };
     } catch (e: any) {

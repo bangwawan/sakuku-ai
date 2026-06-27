@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
 
     const saldoKantongActive: any = {};
     Object.keys(saldoPerKantong).forEach(k => {
-        if (saldoPerKantong[k].is_active === 1) saldoKantongActive[k] = saldoPerKantong[k].saldo;
+        if (saldoPerKantong[k].is_active === 1 || saldoPerKantong[k].is_active === true) saldoKantongActive[k] = saldoPerKantong[k].saldo;
     });
 
     return {

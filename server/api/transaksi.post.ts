@@ -22,17 +22,17 @@ export default defineEventHandler(async (event) => {
             const nominalTransaksi = parseFloat(body.nominal);
             
             const [inRows]: any = await pool.execute(
-                'SELECT SUM(nominal) as totalIn FROM transaksi WHERE kantong_tujuan = ?', 
+                'SELECT SUM(nominal) as total_in FROM transaksi WHERE kantong_tujuan = ?', 
                 [kantongAsal]
             );
             
             const [outRows]: any = await pool.execute(
-                'SELECT SUM(nominal) as totalOut FROM transaksi WHERE kantong_asal = ?', 
+                'SELECT SUM(nominal) as total_out FROM transaksi WHERE kantong_asal = ?', 
                 [kantongAsal]
             );
 
-            const totalIn = inRows[0].totalIn ? parseFloat(inRows[0].totalIn) : 0;
-            const totalOut = outRows[0].totalOut ? parseFloat(outRows[0].totalOut) : 0;
+            const totalIn = inRows[0].total_in ? parseFloat(inRows[0].total_in) : 0;
+            const totalOut = outRows[0].total_out ? parseFloat(outRows[0].total_out) : 0;
             const currentSaldo = totalIn - totalOut;
 
             if (currentSaldo < nominalTransaksi) {

@@ -1,1 +1,0 @@
-karena role pencatat tidak dapat membuka halaman kelola, maka ikon kelola di footer hilangkan saja

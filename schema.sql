@@ -40,6 +40,11 @@ CREATE TABLE IF NOT EXISTS transaksi (
     link_bukti TEXT NULL
 );
 
+CREATE TABLE IF NOT EXISTS pengaturan (
+    kunci VARCHAR(50) PRIMARY KEY,
+    nilai TEXT NULL
+);
+
 -- Dummy data removed, replace with admin if needed
 INSERT INTO kantong (nama) VALUES ('Dompet Tunai'), ('Rekening BCA'), ('Gopay') ON DUPLICATE KEY UPDATE nama=nama;
 INSERT INTO kategori (jenis, nama) VALUES ('Pemasukan', 'Gaji'), ('Pengeluaran', 'Belanja Bulanan') ON DUPLICATE KEY UPDATE nama=nama;

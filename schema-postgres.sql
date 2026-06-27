@@ -37,5 +37,10 @@ CREATE TABLE IF NOT EXISTS transaksi (
     link_bukti TEXT NULL
 );
 
+CREATE TABLE IF NOT EXISTS pengaturan (
+    kunci VARCHAR(50) PRIMARY KEY,
+    nilai TEXT NULL
+);
+
 INSERT INTO kantong (nama) VALUES ('Dompet Tunai'), ('Rekening BCA'), ('Gopay') ON CONFLICT (nama) DO NOTHING;
 INSERT INTO kategori (jenis, nama) VALUES ('Pemasukan', 'Gaji'), ('Pengeluaran', 'Belanja Bulanan') ON CONFLICT (nama) DO NOTHING;

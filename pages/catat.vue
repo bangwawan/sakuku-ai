@@ -78,7 +78,15 @@ import Swal from 'sweetalert2'
 const refData = ref({ kategori: [], kantong: [] })
 const filteredKategori = ref([])
 const quickInputs = ref([])
-const form = ref({ tanggal: new Date().toISOString().substring(0, 10), jenis: '', kategori: '', nominal: '', kantongAsal: '', kantongTujuan: '', catatan: '', fileData: null })
+const form = ref({ tanggal: '', jenis: '', kategori: '', nominal: '', kantongAsal: '', kantongTujuan: '', catatan: '', fileData: null })
+
+const getLocalDateString = () => {
+  const d = new Date()
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
 
 const fetchRef = async () => { refData.value = await $fetch('/api/referensi') }
 const fetchQuickInputs = async () => {
@@ -109,10 +117,11 @@ const handleFile = (e) => {
 const handleFormSubmit = async () => {
   const res = await $fetch('/api/transaksi', { method: 'POST', body: form.value })
   await Swal.fire({ title: 'Info', text: res.pesan, icon: res.status === 'success' ? 'success' : 'error' })
-  if(res.status === 'success') navigateTo('/')
+  if(res.status === 'success') navigateTo('/dashboard')
 }
 onMounted(() => {
   fetchRef()
   fetchQuickInputs()
+  form.value.tanggal = getLocalDateString()
 })
 </script>

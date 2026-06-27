@@ -18,10 +18,12 @@ export default defineEventHandler(async (event) => {
             if (user.is_active === 0 || user.is_active === false) {
                 return { status: 'error', pesan: 'Akun Anda dinonaktifkan. Silakan hubungi Administrator.' };
             }
+            const displayName = user.nama_lengkap || user.username;
             // Set session cookie valid selama 7 hari
             setCookie(event, 'user_session', user.username, { maxAge: 60 * 60 * 24 * 7 });
             setCookie(event, 'user_role', user.role, { maxAge: 60 * 60 * 24 * 7 });
-            return { status: 'success', username: user.username, role: user.role };
+            setCookie(event, 'user_fullname', displayName, { maxAge: 60 * 60 * 24 * 7 });
+            return { status: 'success', username: user.username, role: user.role, fullname: displayName };
         }
         return { status: 'error', pesan: 'Nama Pengguna atau PIN salah!' };
     } catch (error: any) {

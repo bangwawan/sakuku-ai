@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     ssr: true,
     app: {
         head: {
-            title: 'Pencatatan Keuangan Keluarga',
+            title: 'SAKUKU AI - Aplikasi Keuangan Pribadi Berbasis AI & PWA',
             meta: [
                 { name: 'viewport', content: 'width=device-width, initial-scale=1' }
             ],
@@ -21,9 +21,9 @@ export default defineNuxtConfig({
     pwa: {
         registerType: 'autoUpdate',
         manifest: {
-            name: 'Pencatatan Keuangan Keluarga',
-            short_name: 'Keuangan',
-            description: 'Aplikasi pencatatan keuangan keluarga',
+            name: 'SAKUKU AI - Aplikasi Keuangan Pribadi Berbasis AI & PWA',
+            short_name: 'SAKUKU AI',
+            description: 'Aplikasi Keuangan Pribadi Berbasis AI & PWA',
             theme_color: '#ffffff',
             background_color: '#ffffff',
             display: 'standalone',
@@ -41,8 +41,8 @@ export default defineNuxtConfig({
             ]
         },
         workbox: {
-            navigateFallback: '/',
-            globPatterns: ['**/*.{js,css,html,png,svg,ico}']
+            navigateFallback: null,
+            globPatterns: ['**/*.{js,css,png,svg,ico,json}']
         },
         devOptions: {
             enabled: true,

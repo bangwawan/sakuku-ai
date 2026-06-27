@@ -1,7 +1,6 @@
 body {
     background-color: #f0f2f5;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding-bottom: 80px;
 }
 
 @media (min-width: 992px) {
@@ -9,7 +8,6 @@ body {
         width: 50% !important;
         max-width: 50% !important;
         margin: auto !important;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.03);
         background: #f0f2f5;
         min-height: 100vh;
     }
@@ -80,6 +78,7 @@ body {
     margin-bottom: 15px;
     background: white;
 }
+
 /* Dashboard specific styles */
 .saldo-card {
     background: linear-gradient(135deg, #0d6efd 0%, #00d2ff 100%);

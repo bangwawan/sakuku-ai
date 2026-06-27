@@ -161,6 +161,7 @@ const submitUpdateProfile = async () => {
   if (res.status === 'success') {
     Swal.fire({ title: 'Berhasil', text: res.pesan, icon: 'success' })
     fetchProfile()
+    useCookie('user_fullname').value = profile.value.nama_lengkap || profile.value.username
   } else {
     Swal.fire({ title: 'Gagal', text: res.pesan, icon: 'error' })
   }

@@ -14,9 +14,10 @@ const mysqlPool = mysql.createPool({
     queueLimit: 0
 });
 
-// PostgreSQL Pool for Vercel
+// PostgreSQL Pool for Vercel / Neon
 const pgPool = new PgPool({
-    connectionString: process.env.POSTGRES_URL,
+    connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
 });
 
 export const pool = {

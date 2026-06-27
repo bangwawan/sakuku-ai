@@ -1,4 +1,4 @@
 node_modules
 .nuxt
 .env
-prompt.md
+server/api/prompt.txt

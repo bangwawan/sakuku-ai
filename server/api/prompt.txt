@@ -1,0 +1,20 @@
+buat planing yang berisi
+
+pada histori transaksi di dashboard munculkan tombol untuk melihat bukti transaksi
+pada halaman catat default hidden field sumber dana, simpan ke, kategori dan bukti transaksi
+ketika transaksi yang dipilih adalah pemasukan munculkan field simpan ke dan kolomnya full width serta field bukti transaksi namun tidak wajib diisi
+ketika transaksi yang dipilih adalah pengeluaran munculkan field sumber dana dan kolomnya full width serta field bukti transaksi
+ketika pilih mutasi maka munculkan field sumber dana dan simpan ke, dengan tampilan 2 kolom sama besar
+
+pada halaman laporan nama pencatat belum muncul, jadi munculkan namanya. dan jika terdapat bukti transaksi maka munculkan tombol untuk melihat bukti transaksinya
+
+pada halaman profile, buatkan form untuk update nama, nomor whatsapp,  email, dan foto
+user dibedakan menjadi 2 role. administrator dan pencatat. admin dapat membuka halaman kelola beserta fungsi didalamnya, sedangkan pencatat tidak bisa
+admin, dapat membuat user baru tetapi role-nya hanya sebagai pencatat 
+user dapat ditambahkan, di ubah, dan dihapus. user yang sudah pernah melakukan pencatatan tidak dapat di hapus. perubahan data hanya untuk nomor whatsapp, email dan status
+untuk fitur manage user buat di halaman profile. setiap user memiliki status (active/inactive). jika inactive user tidak bisa login.
+
+halaman login menggunakan username dan pin
+
+validasi username minimal 6 karakter huruf kecil semua sedangkan pin adalah angka minimal 6 digit
+

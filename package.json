@@ -1,0 +1,25 @@
+{
+    "name": "nuxt-finance-mysql",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "nuxt build",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare"
+    },
+    "dependencies": {
+        "@google/generative-ai": "^0.24.1",
+        "@vite-pwa/nuxt": "^1.1.1",
+        "mysql2": "^3.9.0",
+        "nuxt": "^3.11.0",
+        "pg": "^8.22.0",
+        "sweetalert2": "^11.26.25",
+        "vue": "^3.4.0",
+        "vue-router": "^4.3.0"
+    },
+    "devDependencies": {
+        "dotenv": "^16.4.0"
+    }
+}

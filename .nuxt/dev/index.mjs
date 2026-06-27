@@ -9,7 +9,7 @@ import viteNodeEntry_mjs from 'file://C:/Source/me/nuxt-finance/node_modules/@nu
 import { viteNodeFetch } from 'file://C:/Source/me/nuxt-finance/node_modules/@nuxt/vite-builder/dist/vite-node.mjs';
 import { GoogleGenerativeAI } from 'file://C:/Source/me/nuxt-finance/node_modules/@google/generative-ai/dist/index.mjs';
 import mysql from 'file://C:/Source/me/nuxt-finance/node_modules/mysql2/promise.js';
-import { Pool } from 'pg';
+import { Pool } from 'file://C:/Source/me/nuxt-finance/node_modules/pg/esm/index.mjs';
 import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file://C:/Source/me/nuxt-finance/node_modules/vue-bundle-renderer/dist/runtime.mjs';
 import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, encodePath, joinRelativeURL } from 'file://C:/Source/me/nuxt-finance/node_modules/ufo/dist/index.mjs';
 import { renderToString } from 'file://C:/Source/me/nuxt-finance/node_modules/vue/server-renderer/index.mjs';
@@ -2146,19 +2146,19 @@ _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 ];
 
 const assets = {
-  "/index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"7e83e-B//thLIiftD0PjAmOXerIAJambc\"",
-    "mtime": "2026-06-27T10:49:10.543Z",
-    "size": 518206,
-    "path": "index.mjs.map"
-  },
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"2193b-k2rnZzkG9K/7+CFVkkQL5L0T028\"",
-    "mtime": "2026-06-27T10:49:10.542Z",
-    "size": 137531,
+    "etag": "\"21b23-bYng4r34TQNLtWF/p3+ujktKjPE\"",
+    "mtime": "2026-06-27T13:01:56.014Z",
+    "size": 138019,
     "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"7ed32-KM+zzQyTv2gAO9c8GFxDUWzenho\"",
+    "mtime": "2026-06-27T13:01:56.015Z",
+    "size": 519474,
+    "path": "index.mjs.map"
   }
 };
 
@@ -3110,7 +3110,8 @@ const mysqlPool = mysql.createPool({
   queueLimit: 0
 });
 const pgPool = new Pool({
-  connectionString: process.env.POSTGRES_URL
+  connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
 });
 const pool = {
   execute: async (sql, params = []) => {
@@ -3136,7 +3137,7 @@ const login_post = defineEventHandler(async (event) => {
     );
     if (rows.length > 0) {
       const user = rows[0];
-      if (user.is_active !== 1) {
+      if (user.is_active === 0 || user.is_active === false) {
         return { status: "error", pesan: "Akun Anda dinonaktifkan. Silakan hubungi Administrator." };
       }
       setCookie(event, "user_session", user.username, { maxAge: 60 * 60 * 24 * 7 });
@@ -3165,16 +3166,14 @@ const logout_post$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePrope
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const insight_get = defineEventHandler(async (event) => {
-  var _a;
   let apiKey = "";
   try {
-    const [rows] = await pool.execute('SELECT nilai FROM pengaturan WHERE kunci = "gemini_api_key"');
+    const [rows] = await pool.execute("SELECT nilai FROM pengaturan WHERE kunci = 'gemini_api_key'");
     if (rows.length > 0 && rows[0].nilai) apiKey = rows[0].nilai.trim();
   } catch (e) {
   }
-  if (!apiKey) apiKey = ((_a = process.env.GEMINI_API_KEY) == null ? void 0 : _a.trim()) || "";
-  if (!apiKey || apiKey.includes("MASUKKAN_API_KEY")) {
-    return { insight: "\u{1F4A1} Masukkan API Key Gemini di Kelola (atau .env) untuk mengaktifkan AI." };
+  if (!apiKey) {
+    return { insight: "\u{1F4A1} Silakan masukkan Gemini API Key di halaman Kelola untuk mengaktifkan fitur AI Insight." };
   }
   const data = await $fetch("/api/transaksi");
   const ringkasan = data.ringkasan;
@@ -3253,7 +3252,7 @@ const status_put$2 = defineEventHandler(async (event) => {
   const body = await readBody(event);
   if (!body.nama || body.is_active === void 0) return { status: "error", pesan: "Data tidak valid" };
   try {
-    await pool.execute("UPDATE kantong SET is_active = ? WHERE nama = ?", [body.is_active, body.nama]);
+    await pool.execute("UPDATE kantong SET is_active = ? WHERE nama = ?", [body.is_active ? true : false, body.nama]);
     return { status: "success", pesan: `Status kantong ${body.nama} berhasil diubah.` };
   } catch (e) {
     return { status: "error", pesan: e.message };
@@ -3314,7 +3313,7 @@ const status_put = defineEventHandler(async (event) => {
   const body = await readBody(event);
   if (!body.nama || body.is_active === void 0) return { status: "error", pesan: "Data tidak valid" };
   try {
-    await pool.execute("UPDATE kategori SET is_active = ? WHERE nama = ?", [body.is_active, body.nama]);
+    await pool.execute("UPDATE kategori SET is_active = ? WHERE nama = ?", [body.is_active ? true : false, body.nama]);
     return { status: "success", pesan: `Status kategori ${body.nama} berhasil diubah.` };
   } catch (e) {
     return { status: "error", pesan: e.message };
@@ -3370,7 +3369,7 @@ const laporan_get$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.definePrope
 
 const apikey_get = defineEventHandler(async () => {
   try {
-    const [rows] = await pool.execute('SELECT nilai FROM pengaturan WHERE kunci = "gemini_api_key"');
+    const [rows] = await pool.execute("SELECT nilai FROM pengaturan WHERE kunci = 'gemini_api_key'");
     if (rows.length > 0) {
       return { apiKey: rows[0].nilai };
     }
@@ -3389,10 +3388,12 @@ const apikey_post = defineEventHandler(async (event) => {
   const body = await readBody(event);
   if (!body.apiKey) return { status: "error", pesan: "API Key tidak boleh kosong" };
   try {
-    await pool.execute(
-      'INSERT INTO pengaturan (kunci, nilai) VALUES ("gemini_api_key", ?) ON DUPLICATE KEY UPDATE nilai = ?',
-      [body.apiKey, body.apiKey]
-    );
+    const [existing] = await pool.execute("SELECT kunci FROM pengaturan WHERE kunci = ?", ["gemini_api_key"]);
+    if (existing.length > 0) {
+      await pool.execute("UPDATE pengaturan SET nilai = ? WHERE kunci = ?", [body.apiKey, "gemini_api_key"]);
+    } else {
+      await pool.execute("INSERT INTO pengaturan (kunci, nilai) VALUES (?, ?)", ["gemini_api_key", body.apiKey]);
+    }
     return { status: "success", pesan: "API Key berhasil disimpan!" };
   } catch (e) {
     return { status: "error", pesan: e.message };
@@ -3480,10 +3481,10 @@ const referensi_get = defineEventHandler(async (event) => {
     if (row.kantong_tujuan) usedKantong.add(row.kantong_tujuan.trim());
   });
   return {
-    kategori: dataKategori.filter((r) => r.is_active === 1).map((r) => [r.jenis, r.nama]),
-    kantong: dataKantong.filter((k) => k.is_active === 1).map((k) => k.nama),
-    kategoriDetail: dataKategori.map((r) => ({ jenis: r.jenis, nama: r.nama, is_active: r.is_active === 1, isUsed: usedKategori.has(r.nama.trim()) })),
-    kantongDetail: dataKantong.map((k) => ({ nama: k.nama, is_active: k.is_active === 1, isUsed: usedKantong.has(k.nama.trim()) }))
+    kategori: dataKategori.filter((r) => r.is_active === 1 || r.is_active === true).map((r) => [r.jenis, r.nama]),
+    kantong: dataKantong.filter((k) => k.is_active === 1 || k.is_active === true).map((k) => k.nama),
+    kategoriDetail: dataKategori.map((r) => ({ jenis: r.jenis, nama: r.nama, is_active: r.is_active === 1 || r.is_active === true, isUsed: usedKategori.has(r.nama.trim()) })),
+    kantongDetail: dataKantong.map((k) => ({ nama: k.nama, is_active: k.is_active === 1 || k.is_active === true, isUsed: usedKantong.has(k.nama.trim()) }))
   };
 });
 
@@ -3538,7 +3539,7 @@ const transaksi_get = defineEventHandler(async (event) => {
   });
   const saldoKantongActive = {};
   Object.keys(saldoPerKantong).forEach((k) => {
-    if (saldoPerKantong[k].is_active === 1) saldoKantongActive[k] = saldoPerKantong[k].saldo;
+    if (saldoPerKantong[k].is_active === 1 || saldoPerKantong[k].is_active === true) saldoKantongActive[k] = saldoPerKantong[k].saldo;
   });
   return {
     ringkasan: { pemasukan: totalPemasukanBulanIni, pengeluaran: totalPengeluaranBulanIni, saldoTotal: totalSaldoAllTime },
@@ -3636,7 +3637,7 @@ const create_post = defineEventHandler(async (event) => {
     const hash = crypto$1.createHash("md5").update(body.pin).digest("hex");
     await pool.execute(
       "INSERT INTO pengguna (username, pin, role, nama_lengkap, no_wa, email, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      [body.username.toLowerCase(), hash, "pencatat", body.nama_lengkap || null, body.no_wa || null, body.email || null, 1]
+      [body.username.toLowerCase(), hash, "pencatat", body.nama_lengkap || null, body.no_wa || null, body.email || null, true]
     );
     return { status: "success", pesan: "Pengguna berhasil ditambahkan" };
   } catch (e) {
@@ -3660,7 +3661,7 @@ const delete_delete = defineEventHandler(async (event) => {
     if (tx.length > 0) {
       return { status: "error", pesan: "Pengguna tidak dapat dihapus karena memiliki riwayat transaksi" };
     }
-    await pool.execute('DELETE FROM pengguna WHERE username = ? AND role = "pencatat"', [body.username]);
+    await pool.execute("DELETE FROM pengguna WHERE username = ? AND role = 'pencatat'", [body.username]);
     return { status: "success", pesan: "Pengguna berhasil dihapus" };
   } catch (e) {
     return { status: "error", pesan: e.message };
@@ -3703,7 +3704,7 @@ const update_put = defineEventHandler(async (event) => {
     const hasTransactions = tx.length > 0;
     let finalNama = body.nama_lengkap || null;
     if (hasTransactions) {
-      const [existingUser] = await pool.execute('SELECT nama_lengkap FROM pengguna WHERE username = ? AND role = "pencatat"', [body.username]);
+      const [existingUser] = await pool.execute("SELECT nama_lengkap FROM pengguna WHERE username = ? AND role = 'pencatat'", [body.username]);
       if (existingUser.length > 0) {
         finalNama = existingUser[0].nama_lengkap;
       }
@@ -3711,13 +3712,13 @@ const update_put = defineEventHandler(async (event) => {
     if (body.pin) {
       const hash = crypto$1.createHash("md5").update(body.pin).digest("hex");
       await pool.execute(
-        'UPDATE pengguna SET nama_lengkap = ?, no_wa = ?, email = ?, is_active = ?, pin = ? WHERE username = ? AND role = "pencatat"',
-        [finalNama, body.no_wa || null, body.email || null, body.is_active ? 1 : 0, hash, body.username]
+        "UPDATE pengguna SET nama_lengkap = ?, no_wa = ?, email = ?, is_active = ?, pin = ? WHERE username = ? AND role = 'pencatat'",
+        [finalNama, body.no_wa || null, body.email || null, body.is_active ? true : false, hash, body.username]
       );
     } else {
       await pool.execute(
-        'UPDATE pengguna SET nama_lengkap = ?, no_wa = ?, email = ?, is_active = ? WHERE username = ? AND role = "pencatat"',
-        [finalNama, body.no_wa || null, body.email || null, body.is_active ? 1 : 0, body.username]
+        "UPDATE pengguna SET nama_lengkap = ?, no_wa = ?, email = ?, is_active = ? WHERE username = ? AND role = 'pencatat'",
+        [finalNama, body.no_wa || null, body.email || null, body.is_active ? true : false, body.username]
       );
     }
     return { status: "success", pesan: "Pengguna berhasil diperbarui" };

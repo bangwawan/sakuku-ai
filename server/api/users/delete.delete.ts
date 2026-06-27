@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
             return { status: 'error', pesan: 'Pengguna tidak dapat dihapus karena memiliki riwayat transaksi' };
         }
 
-        await pool.execute('DELETE FROM pengguna WHERE username = ? AND role = "pencatat"', [body.username]);
+        await pool.execute("DELETE FROM pengguna WHERE username = ? AND role = 'pencatat'", [body.username]);
         return { status: 'success', pesan: 'Pengguna berhasil dihapus' };
     } catch (e: any) {
         return { status: 'error', pesan: e.message };

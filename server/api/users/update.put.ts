@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
         let finalNama = body.nama_lengkap || null;
         if (hasTransactions) {
             // Fetch existing nama_lengkap to preserve it
-            const [existingUser]: any = await pool.execute('SELECT nama_lengkap FROM pengguna WHERE username = ? AND role = "pencatat"', [body.username]);
+            const [existingUser]: any = await pool.execute("SELECT nama_lengkap FROM pengguna WHERE username = ? AND role = 'pencatat'", [body.username]);
             if (existingUser.length > 0) {
                 finalNama = existingUser[0].nama_lengkap;
             }
@@ -25,12 +25,12 @@ export default defineEventHandler(async (event) => {
         if (body.pin) {
             const hash = crypto.createHash('md5').update(body.pin).digest('hex');
             await pool.execute(
-                'UPDATE pengguna SET nama_lengkap = ?, no_wa = ?, email = ?, is_active = ?, pin = ? WHERE username = ? AND role = "pencatat"', 
+                "UPDATE pengguna SET nama_lengkap = ?, no_wa = ?, email = ?, is_active = ?, pin = ? WHERE username = ? AND role = 'pencatat'",
                 [finalNama, body.no_wa || null, body.email || null, body.is_active ? true : false, hash, body.username]
             );
         } else {
             await pool.execute(
-                'UPDATE pengguna SET nama_lengkap = ?, no_wa = ?, email = ?, is_active = ? WHERE username = ? AND role = "pencatat"', 
+                "UPDATE pengguna SET nama_lengkap = ?, no_wa = ?, email = ?, is_active = ? WHERE username = ? AND role = 'pencatat'",
                 [finalNama, body.no_wa || null, body.email || null, body.is_active ? true : false, body.username]
             );
         }

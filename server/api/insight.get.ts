@@ -4,14 +4,12 @@ import { pool } from '~/server/utils/db';
 export default defineEventHandler(async (event) => {
     let apiKey = '';
     try {
-        const [rows]: any = await pool.execute('SELECT nilai FROM pengaturan WHERE kunci = "gemini_api_key"');
+        const [rows]: any = await pool.execute("SELECT nilai FROM pengaturan WHERE kunci = 'gemini_api_key'");
         if (rows.length > 0 && rows[0].nilai) apiKey = rows[0].nilai.trim();
     } catch(e) {}
     
-    if (!apiKey) apiKey = process.env.GEMINI_API_KEY?.trim() || '';
-
-    if (!apiKey || apiKey.includes('MASUKKAN_API_KEY')) {
-        return { insight: '💡 Masukkan API Key Gemini di Kelola (atau .env) untuk mengaktifkan AI.' };
+    if (!apiKey) {
+        return { insight: '💡 Silakan masukkan Gemini API Key di halaman Kelola untuk mengaktifkan fitur AI Insight.' };
     }
 
     // Panggil endpoint transaksi internal secara server-side
